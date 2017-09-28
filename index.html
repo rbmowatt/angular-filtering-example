@@ -14,7 +14,11 @@
 
     </head>
     <body>
+
         <div class="container" ng-app="symTestApp" ng-controller="searchController">
+            <div class="alert alert-danger" ng-show="error">
+                {{ error || 'its the end of the world as we know it'}}
+            </div>
             <div class="panel panel-default search-panel">
                 <div class="panel-heading">
                     <div class="row">

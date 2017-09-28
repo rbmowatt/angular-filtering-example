@@ -16,8 +16,6 @@ app.filter('unique',function (){
     };
 });
 
-
-// here we define our unique filter
 app.filter('getOrgObjects',function (){
 
     return function (collection){
@@ -38,7 +36,10 @@ app.factory('Data',["$resource", function ($resource){
 app.controller('searchController',['$scope','$filter','Data',function ($scope,$filter,Data){
         // well keep this here to represnt origina data so we dont lose it on filtering
         $scope.allPeeps=[];
+        $scope.allOrgs=[];
+        $scope.people=[];
         $scope.searchTerm='';
+        $scope.error = false;
 
         //just some stuff to handle toggle functionaltiy
         $scope.hidden=false;
@@ -49,13 +50,14 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
         Data.query().$promise.then(
                 function (res)
                 {
-                    $scope.people=$scope.allPeeps=res;
-
+                    $scope.allPeeps=$filter('orderBy')(res, 'person_name');
+                    $scope.allOrgs=$filter('unique')($filter('getOrgObjects')(res),'organization_name');
+                    $scope.people=$scope.allPeeps;
                 },
                 function (err)
                 {
                     //obviously not the best error handling
-                    alert('Uh-oh! There\'s been an error!');
+                    $scope.error = 'Uh-oh! There\'s been an error!';
                 }
         );
 
@@ -69,8 +71,8 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
         $scope.$watch('people',function (){
             //first we'll filter it down to unique names and then create individual org objects to filter against
             //if we don't create specific org objects here then we'll be runnibg match against hings we dont want to match
-            var orgs=$filter('unique')($filter('getOrgObjects')($scope.people),'organization_name');
-            $scope.orgs=$filter('filter')(orgs,$scope.searchTerm);
+            var orgs=$filter('filter')($scope.allOrgs,$scope.searchTerm);
+            $scope.orgs=$filter('orderBy')(orgs, 'organization_name');
         });
     }]);
 app.directive('stBadge',function ()
@@ -84,8 +86,6 @@ app.directive('stBadge',function ()
             index:'='
         },
         link:function (scope){
-            //set up a class variable to be applied
-            this.class= null;
             //get the initials of the person or org
             scope.initials=function (){
                 names=scope.name.split(' ');
@@ -97,20 +97,16 @@ app.directive('stBadge',function ()
                     return names[0][0]+names[names.length -1 ][0];
                 }else
                 {
-                    //there was nothing there, rather than throw an error we'll just put two spaces to keep everything looking the same
+                    //there was nothing there, rather than throw an error we'll just put two spaces to keep everything looking
                     return '&nbsp;&nbsp;';
                 }
             };
 
             scope.getClass=function (){
                 //wasnt sure here if i was supposed to make them reset each time or be sticky to a person
-                //made them sticky, but could just remove the check for this.class to make them refresh
-                if(this.class){
-                    return this.class;
-                }
+                //didn't do it because i thought it would make them look weird if they weren't in a repetetive order
                 var btns=['primary','success','info','warning'];
-                this.class =  btns[scope.index%btns.length];
-                return this.class;
+                return btns[scope.index%btns.length];
             };
         }
     };

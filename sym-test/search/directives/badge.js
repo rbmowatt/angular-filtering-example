@@ -9,8 +9,6 @@ app.directive('stBadge',function ()
             index:'='
         },
         link:function (scope){
-            //set up a class variable to be applied
-            this.class= null;
             //get the initials of the person or org
             scope.initials=function (){
                 names=scope.name.split(' ');
@@ -22,20 +20,16 @@ app.directive('stBadge',function ()
                     return names[0][0]+names[names.length -1 ][0];
                 }else
                 {
-                    //there was nothing there, rather than throw an error we'll just put two spaces to keep everything looking the same
+                    //there was nothing there, rather than throw an error we'll just put two spaces to keep everything looking
                     return '&nbsp;&nbsp;';
                 }
             };
 
             scope.getClass=function (){
                 //wasnt sure here if i was supposed to make them reset each time or be sticky to a person
-                //made them sticky, but could just remove the check for this.class to make them refresh
-                if(this.class){
-                    return this.class;
-                }
+                //didn't do it because i thought it would make them look weird if they weren't in a repetetive order
                 var btns=['primary','success','info','warning'];
-                this.class =  btns[scope.index%btns.length];
-                return this.class;
+                return btns[scope.index%btns.length];
             };
         }
     };

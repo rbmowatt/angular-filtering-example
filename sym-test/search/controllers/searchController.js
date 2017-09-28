@@ -1,7 +1,10 @@
 app.controller('searchController',['$scope','$filter','Data',function ($scope,$filter,Data){
         // well keep this here to represnt origina data so we dont lose it on filtering
         $scope.allPeeps=[];
+        $scope.allOrgs=[];
+        $scope.people=[];
         $scope.searchTerm='';
+        $scope.error = false;
 
         //just some stuff to handle toggle functionaltiy
         $scope.hidden=false;
@@ -12,13 +15,14 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
         Data.query().$promise.then(
                 function (res)
                 {
-                    $scope.people=$scope.allPeeps=res;
-
+                    $scope.allPeeps=$filter('orderBy')(res, 'person_name');
+                    $scope.allOrgs=$filter('unique')($filter('getOrgObjects')(res),'organization_name');
+                    $scope.people=$scope.allPeeps;
                 },
                 function (err)
                 {
                     //obviously not the best error handling
-                    alert('Uh-oh! There\'s been an error!');
+                    $scope.error = 'Uh-oh! There\'s been an error!';
                 }
         );
 
@@ -32,7 +36,7 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
         $scope.$watch('people',function (){
             //first we'll filter it down to unique names and then create individual org objects to filter against
             //if we don't create specific org objects here then we'll be runnibg match against hings we dont want to match
-            var orgs=$filter('unique')($filter('getOrgObjects')($scope.people),'organization_name');
-            $scope.orgs=$filter('filter')(orgs,$scope.searchTerm);
+            var orgs=$filter('filter')($scope.allOrgs,$scope.searchTerm);
+            $scope.orgs=$filter('orderBy')(orgs, 'organization_name');
         });
     }]);

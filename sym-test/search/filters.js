@@ -15,8 +15,6 @@ app.filter('unique',function (){
     };
 });
 
-
-// here we define our unique filter
 app.filter('getOrgObjects',function (){
 
     return function (collection){
