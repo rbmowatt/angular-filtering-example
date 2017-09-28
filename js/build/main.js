@@ -39,7 +39,7 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
         $scope.allOrgs=[];
         $scope.people=[];
         $scope.searchTerm='';
-        $scope.error = false;
+        $scope.error=false;
 
         //just some stuff to handle toggle functionaltiy
         $scope.hidden=false;
@@ -50,29 +50,25 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
         Data.query().$promise.then(
                 function (res)
                 {
-                    $scope.allPeeps=$filter('orderBy')(res, 'person_name');
+                    $scope.allPeeps=$scope.people=$filter('orderBy')(res,'person_name');
+                    //first we'll filter it down to unique names and then create individual org objects to filter against
+                    //if we don't create specific org objects here then we'll be runnibg match against hings we dont want to match
                     $scope.allOrgs=$filter('unique')($filter('getOrgObjects')(res),'organization_name');
-                    $scope.people=$scope.allPeeps;
                 },
                 function (err)
                 {
                     //obviously not the best error handling
-                    $scope.error = 'Uh-oh! There\'s been an error!';
+                    $scope.error='Uh-oh! There\'s been an error!';
                 }
         );
 
-        // filter the people for search term
-        $scope.filter=function (term){
-            $scope.searchTerm = term;
-            $scope.people=$filter('filter')($scope.allPeeps,term);
-        };
 
         //watch for changes to the people array and filter orgs accordingly
-        $scope.$watch('people',function (){
-            //first we'll filter it down to unique names and then create individual org objects to filter against
-            //if we don't create specific org objects here then we'll be runnibg match against hings we dont want to match
+        $scope.$watch('searchTerm',function (){
+
+            $scope.people=$filter('filter')($scope.allPeeps,$scope.searchTerm);
             var orgs=$filter('filter')($scope.allOrgs,$scope.searchTerm);
-            $scope.orgs=$filter('orderBy')(orgs, 'organization_name');
+            $scope.orgs=$filter('orderBy')(orgs,'organization_name');
         });
     }]);
 app.directive('stBadge',function ()
