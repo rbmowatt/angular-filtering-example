@@ -28,7 +28,7 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
                 }
         );
 
-        //watch for changes to the people array and filter orgs accordingly
+        //watch for changes to the searchTerm and filter people accordingly
         $scope.$watch('searchTerm',function (){
             $scope.people=$filter('filter')($scope.allPeeps,$scope.searchTerm);
 
