@@ -19,14 +19,15 @@
             </div>
             <div class="panel panel-default search-panel">
                 <div class="panel-heading">
-                    <div class="row">
+                    <div >
                         <div class="col-md-6 col-md-offset-3 form-group">
                             <input ng-hide="hidden" class="form-control" type ="text" placeholder="start typing to search..."  ng-model="searchTerm"  />
                         </div>
                         <div class="col-md-1 col-md-offset-2">
+
                             <a ng-click="toggle()">{{ !hidden ? 'close' : 'open'}}</a>
                         </div>
-
+                        <div style="clear:both"></div>
                     </div>
                 </div>
                 <div class="panel-body" ng-hide="hidden">
