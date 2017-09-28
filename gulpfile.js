@@ -23,12 +23,10 @@ gulp.task('js',function (){
             .pipe(gulpif('*.js',ngAnnotate())) // ng-annotate if .js
             .pipe(concat('main.js'));
 
-
-    //if (!devBuild) {
     jsbuild=jsbuild
-            //.pipe(stripdebug())
-           // .pipe(uglify());
-    //}
+            .pipe(stripdebug())
+            .pipe(uglify());
+   
     return jsbuild.pipe(gulp.dest(folder.js.build));
 });
 
