@@ -38,6 +38,7 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
         $scope.allPeeps=[];
         $scope.allOrgs=[];
         $scope.people=[];
+        $scope.orgs=[];
         $scope.searchTerm='';
         $scope.error=false;
 
@@ -53,8 +54,7 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
                     $scope.allPeeps=$scope.people=$filter('orderBy')(res,'person_name');
                     //first we'll filter it down to unique names and then create individual org objects to filter against
                     //if we don't create specific org objects here then we'll be runnibg match against hings we dont want to match
-                    var orgs=$filter('unique')($filter('getOrgObjects')(res),'organization_name');
-                    $scope.allOrgs = $scope.orgs =$filter('orderBy')(orgs,'organization_name');
+                    $scope.allOrgs= $filter('orderBy')(res,'organization_name');
                 },
                 function (err)
                 {
@@ -66,9 +66,16 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
         //watch for changes to the people array and filter orgs accordingly
         $scope.$watch('searchTerm',function (){
             $scope.people=$filter('filter')($scope.allPeeps,$scope.searchTerm);
-            $scope.orgs=$filter('filter')($scope.allOrgs,$scope.searchTerm);
+
         });
-    }]);
+
+        //watch for changes to the people array and filter orgs accordingly
+        $scope.$watch('people',function (){
+            var orgs=$filter('filter')($scope.allOrgs,$scope.searchTerm);
+            $scope.orgs=$filter('unique')(orgs,'organization_name');
+        });
+
+    }]); 
 app.directive('stBadge',function ()
 {
     return {
