@@ -1,5 +1,5 @@
 app.controller('searchController',['$scope','$filter','Data',function ($scope,$filter,Data){
-        // well keep this here to represnt origina data so we dont lose it on filtering
+        // well keep this here to represnt original data so we dont lose it on filtering
         $scope.allPeeps=[];
         $scope.allOrgs=[];
         $scope.people=[];
@@ -27,10 +27,8 @@ app.controller('searchController',['$scope','$filter','Data',function ($scope,$f
                 }
         );
 
-
         //watch for changes to the people array and filter orgs accordingly
         $scope.$watch('searchTerm',function (){
-
             $scope.people=$filter('filter')($scope.allPeeps,$scope.searchTerm);
             var orgs=$filter('filter')($scope.allOrgs,$scope.searchTerm);
             $scope.orgs=$filter('orderBy')(orgs,'organization_name');
