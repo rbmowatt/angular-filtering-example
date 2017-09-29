@@ -2,7 +2,7 @@ app.directive('stBadge',function ()
 {
     return {
         restrict:'C',
-        template:'<button type="button" class="btn btn-{{getClass()}}">{{initials()}}</button>',
+        template:'<button type="button" class="btn btn-sm btn-{{getClass()}}">{{initials()}}</button>',
         replace:false,
         scope:{
             name:"=",

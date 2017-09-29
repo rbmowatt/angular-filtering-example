@@ -18,14 +18,24 @@ body{
 
 .search-panel .btn{
     cursor:default;
+    border-radius: 0;
+}
+
+.search-panel table tr div{
+
+    line-height:40px;
+    vertical-align: middle;
+    padding:0px;
 }
 
 .search-panel table tr div:first-child{
     padding-left:0px !important;
+
 }
 
 .search-panel table tr div:last-child{
     padding-right:0px !important;
+
 }
 
 .search-panel span.st-badge{
