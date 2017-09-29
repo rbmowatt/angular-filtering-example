@@ -56,5 +56,12 @@ body{
 
 .search-panel .panel-heading
 {
-    background: linear-gradient(to bottom, #e6e6e6 0%, #ffffff 100%);
+    background: linear-gradient(to bottom, #e6e6e6 0%, #ffffff 40%);
+}
+
+.mid-align
+{
+    line-height:35px;
+    vertical-align: middle;
+    padding:0px;
 }
