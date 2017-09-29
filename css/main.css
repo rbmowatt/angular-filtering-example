@@ -42,7 +42,6 @@ body{
     padding:0 10px 0 0;
 }
 
-
 .search-panel .form-group
 {
     margin-bottom:0px;
@@ -59,7 +58,7 @@ body{
     background: linear-gradient(to bottom, #e6e6e6 0%, #ffffff 40%);
 }
 
-.mid-align
+.panel-heading .mid-align
 {
     line-height:35px;
     vertical-align: middle;
